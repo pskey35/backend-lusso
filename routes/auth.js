@@ -1,11 +1,8 @@
-const e = require("express")
 const express = require("express")
-
-
-
+const xss = require("xss")
 const router = express.Router()
 
-
+//este middelware servira para proximos endpoints
 const authToken = (req, res, next) => {
 
     //esto es para el middleware y autenticar en los endpoints que se requiera
@@ -26,14 +23,15 @@ const authToken = (req, res, next) => {
 router.post("/login", authToken, (req, res) => {
     const { username, password } = req.body;
 
+    const inputSanoUser = xss(req.body.username)
+    const inputSanoPass = xss(req.body.password)
+
 
     //si el usuario coincide con la password entonces
     //devolvemos el jwt caso contrario no
-
-
     if (true) {
         //el id se genera de database 
-        const token = jwt.sign({ id: 3, username: "pablito" }, "secretKey")
+        const token = jwt.sign({ id: 3, username: inputSanoUser }, "secretKey")
 
         return res.status(200).json({
             token: token,
@@ -50,7 +48,8 @@ router.post("/login", authToken, (req, res) => {
 
 router.post("/register", (req, res) => {
     const { user, password, telefono, address } = req.body
-
+    const userSano = xss(req.body.user.trim())
+    const passwordSano = xss(req.body.password.trim())
 
     //si existe el user en la databse mandarle un error porque 
     //no debe de haber mas de un usuario con el mismo nombre
@@ -58,26 +57,51 @@ router.post("/register", (req, res) => {
         return res.status(401).json({
             error: true,
             message: "Este usuario ya existe en la database prueba con otro nombre de usuario",
-        }) 
-    }
-
-
-    //quiero validar el campo user para que no inyecten nada
-    if(user.trim().length >= 100){
-        //en el front tambien se tiene que validar lo de trim()
-        return res.status(400).json({
-            error:true,
-            message:"Error su nombre de usuario no debe contener mas de 100 caracteres"
         })
     }
 
-    //hacer consulta de sql para recibir el id de tal usuario
-    const token = jwt.sign({ id: 12, usuario: "juanito" }, "secretKey")
 
+    let message;
+    let token;
+    let error;
+    //quiero validar el campo user para que no inyecten nada
+    if (userSano.length >= 100) {
+        //en el front tambien se tiene que validar lo de trim()
+        message = "Error su nombre de usuario no debe contener mas de 100 caracteres"
+        token = null
+        error = true
+    } else if (!(/.\w+\d\W.+/.test())) {
+        //"Si la cadena no coincide con el patrón definido por la expresión regular"
+        message = "La contrasena no es segura pruebe con otro"
+        token = null
+        error = true
+    }
+
+
+    if (error) {
+        return res.status(400).json({
+            error,
+            token,
+            message
+        })
+    }
+
+
+
+    //si no hay error entra aqui
+    //hacer consulta de sql para recibir el id de tal usuario
+    token = jwt.sign({ id: 12, usuario: "juanito" }, "secretKey")
     return res.status(200).json({
         error: false,
-        message:"Se ha creado su cuenta exitosamente",
+        token,
+        message: "Se ha creado su cuenta exitosamente",
     })
+
+
+
+
+
+
 
 
 
