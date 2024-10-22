@@ -6,16 +6,16 @@ const express = require("express")
 const router = express.Router()
 
 
-const authToken = (req,res,next) =>{
+const authToken = (req, res, next) => {
 
     //esto es para el middleware y autenticar en los endpoints que se requiera
     console.log(req.headers)
     const token = req.headers["authorization"]
 
 
-    if(!token){
+    if (!token) {
         //si no hay token mandamos error
-        return res.status(400).json({message:"Acceso denegado"})
+        return res.status(400).json({ message: "Acceso denegado" })
     }
 
     next()
@@ -23,7 +23,7 @@ const authToken = (req,res,next) =>{
 
 
 
-router.post("/login", authToken,(req, res) => {
+router.post("/login", authToken, (req, res) => {
     const { username, password } = req.body;
 
 
@@ -33,12 +33,12 @@ router.post("/login", authToken,(req, res) => {
 
     if (true) {
         //el id se genera de database 
-        const token = jwt.sign({ id: 3, username:"pablito"}, "secretKey")
+        const token = jwt.sign({ id: 3, username: "pablito" }, "secretKey")
 
-        return res.json({
-            token:token,
-            message:"Se ha logeado con exito",//llega esto y se hace redireccion en el frontend
-            error:false
+        return res.status(200).json({
+            token: token,
+            message: "Se ha logeado con exito",//llega esto y se hace redireccion en el frontend
+            error: false
         })
     }
 
@@ -48,27 +48,39 @@ router.post("/login", authToken,(req, res) => {
 })
 
 
-router.post("/register",(req,res)=>{
-    const {user,password,telefono,address} = req.body
+router.post("/register", (req, res) => {
+    const { user, password, telefono, address } = req.body
 
 
     //si existe el user en la databse mandarle un error porque 
     //no debe de haber mas de un usuario con el mismo nombre
-    if(false){
-        res.json({
-            error:true,
-            message:"Este usuario ya existe en la database prueba con otro nombre de usuario",
-
-        })
-        res.status(200);
-        return
+    if (false) {
+        return res.status(401).json({
+            error: true,
+            message: "Este usuario ya existe en la database prueba con otro nombre de usuario",
+        }) 
     }
 
- 
+
+    //quiero validar el campo user para que no inyecten nada
+    if(user.trim().length >= 100){
+        //en el front tambien se tiene que validar lo de trim()
+        return res.status(400).json({
+            error:true,
+            message:"Error su nombre de usuario no debe contener mas de 100 caracteres"
+        })
+    }
+
     //hacer consulta de sql para recibir el id de tal usuario
-    const token = jwt.sign({id:12,usuario:"juanito"},"secretKey")
-    
-    res.json()
+    const token = jwt.sign({ id: 12, usuario: "juanito" }, "secretKey")
+
+    return res.status(200).json({
+        error: false,
+        message:"Se ha creado su cuenta exitosamente",
+    })
+
+
+
 })
 
 module.exports = router
