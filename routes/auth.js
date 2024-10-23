@@ -1,5 +1,6 @@
-const express = require("express")
-const xss = require("xss")
+import express from "express"
+import xss from "xss"
+
 const router = express.Router()
 
 //este middelware servira para proximos endpoints
@@ -107,4 +108,4 @@ router.post("/register", (req, res) => {
 
 })
 
-module.exports = router
+export default router

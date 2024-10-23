@@ -1,8 +1,10 @@
-const express = require("express")
-const firebase = require("firebase/compat/app");
-require("firebase/compat/storage");
-const fs = require("fs")
-const path = require('path');
+import express from "express"
+import firebase from "firebase/compat/app"
+import "firebase/compat/storage"
+import fs from "fs"
+import path from "path"
+import { fileURLToPath } from "url"
+
 
 
 const routerHome = express.Router()
@@ -10,15 +12,15 @@ const routerHome = express.Router()
 
 
 
-routerHome.get("/",(req,res)=>{
+routerHome.get("/", (req, res) => {
     res.json({
-        saludo:"hola"
+        saludo: "hola"
     })
 })
 
 
-routerHome.get("/allProducts",(req,res)=>{
-    const basePath = path.join(__dirname, '..', 'public'); // Ruta a la carpeta public
+routerHome.get("/allProducts", (req, res) => {
+    const basePath = path.join(fileURLToPath(import.meta.url), '..', 'public'); // Ruta a la carpeta public
     const folders = ['producto-1', 'producto-2', 'producto-3']; // Nombres de las carpetas
 
     const products = folders.map(folder => {
@@ -32,4 +34,6 @@ routerHome.get("/allProducts",(req,res)=>{
     res.json(products); // Devolver las imágenes como JSON
 })
 
-module.exports = routerHome
+
+
+export default routerHome 
