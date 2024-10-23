@@ -1,6 +1,6 @@
 import express from "express"
 import cors from "cors"
-import home from "./routes/home.js"
+import home from "./routes/routerHome.js"
 import auth from "./routes/auth.js"
 import path from "path"
 import { fileURLToPath } from 'url';
