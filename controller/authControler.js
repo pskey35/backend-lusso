@@ -1,13 +1,28 @@
 import xss from "xss"
+import {User} from "../models/authModel.js"
+
+export const registerControler = async (req, res) => {
+   // const { user, password, telefono, address, edad} = req.body
+    //const userSano = xss(req.body.user.trim())
 
 
-const registerControler = (req, res) => {
-    const { user, password, telefono, address } = req.body
-    const userSano = xss(req.body.user.trim())
+
+    /*CALL registrar_usuario('Juan', 
+    'Pérez', 'juan@example.com', 'contraseñaSegura',
+     '123456789', 30);
+*/
+
+
+    const nombreSano = xss(req.body.name.trim())
+    const emailSano = xss(req.body.email.trim())
     const passwordSano = xss(req.body.password.trim())
+    const telefonoSano = xss(req.body.telefono.trim())
+    const edadSano = xss(req.body.edad.trim())
 
     //si existe el user en la databse mandarle un error porque 
     //no debe de haber mas de un usuario con el mismo nombre
+
+    
     if (false) {
         return res.status(401).json({
             error: true,
@@ -25,13 +40,22 @@ const registerControler = (req, res) => {
         message = "Error su nombre de usuario no debe contener mas de 100 caracteres"
         token = null
         error = true
-    } else if (!(/.\w+\d\W.+/.test())) {
+    }
+    
+    /*else if (!(/.\w+\d\W.+/.test(passwordSano))) {
         //"Si la cadena no coincide con el patrón definido por la expresión regular"
         message = "La contrasena no es segura pruebe con otro"
         token = null
         error = true
+    }else if(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test()){
+        //aqui tengo que ver si todo
     }
-
+*/
+    //falta hacer validacion con REGEX en password
+    if(password){
+        //si la password 
+     
+    }
 
     if (error) {
         return res.status(400).json({
