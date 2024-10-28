@@ -6,6 +6,7 @@ export function homeFunction(req, res) {
     return res.json({ prueba: "saludo" })
 }
 
+
 export function allProductFunction(req, res) {
 
     const __filename = fileURLToPath(import.meta.url);
