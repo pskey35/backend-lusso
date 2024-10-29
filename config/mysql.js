@@ -17,6 +17,7 @@ const connection = mysql.createPool({
 
 
 export const mysqlPromesa = (consulta,values)=>{
+
   return new Promise((resolve,reject)=>{
     connection.query(consulta,values,(err,query)=>{
       if(err){
@@ -25,4 +26,6 @@ export const mysqlPromesa = (consulta,values)=>{
       resolve(query)
     })
   })
+
+
 }

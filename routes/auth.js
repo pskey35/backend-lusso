@@ -8,7 +8,8 @@ const routerAuth = express.Router()
 
 routerAuth.post("/login",authToken,controler.loginControler)
 
-routerAuth.post("/register",authToken,controler.registerControler)
+//routerAuth.post("/register",authToken,controler.registerControler)
+routerAuth.post("/register",controler.registerControler)
 
 
 export default routerAuth
