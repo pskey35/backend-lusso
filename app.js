@@ -6,16 +6,9 @@ import path from "path"
 import { fileURLToPath } from 'url';
 import dotenv from "dotenv"
 import images from "./routes/images.js"
-import { connection } from "./config/mysql.js"
 
 
-connection.connect((error) => {
-    if (error) {
-        console.error('Error al conectar a la base de datos:', error.message);
-    } else {
-        console.log('Conexión exitosa a la base de datos');
-    }
-});
+
 
 
 const app = express()
