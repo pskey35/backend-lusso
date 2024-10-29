@@ -52,7 +52,7 @@ export const registerControler = async (req, res) => {
         console.log("sa")
         //si password es valido entonces se registra en la database 
         //y se le da un token jwt
-        const {error,message,id,usuario} = await User.registrar_usuario(
+        const {error,message,id,} = await User.registrar_usuario(
             [nombreSano, apellidoSano,emailSano, 
              passwordSano, telefonoSano, edadSano,
              direccionSano,ciudadSano,departamentoSano,
@@ -61,8 +61,8 @@ export const registerControler = async (req, res) => {
 
        
         console.log("id usuario::",id)
-        console.log("nombr usuaroi::",usuario)
-        const token = jwt.sign({id,usuario},"secretKey")
+        console.log("nombr usuaroi::",nombreSano)
+        const token = jwt.sign({id,nombreSano},"secretKey")
       
         return res.json({error,message,token})
     }else{
