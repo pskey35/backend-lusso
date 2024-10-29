@@ -3,34 +3,32 @@ import { mysqlPromesa } from "../config/mysql.js"
 export class User {
 
     static async registrar_usuario(...user) {
-
-        //nombreSano,apellidoSano,emailSano,passwordSano, --- 
-        //opcionales::: telefonoSano, edadSano, direccionSano,departamentoSano, paisSano, codigoPostalSano
-        const [
-            nombreSano, apellidoSano, emailSano,
-            passwordSano, telefonoSano, edadSano,
-            direccionSano,ciudadSano, departamentoSano, paisSano,
-            codigoPostalSano
-        ] = user
         try {
-       
+            //nombreSano,apellidoSano,emailSano,passwordSano, --- 
+            //opcionales::: telefonoSano, edadSano, direccionSano,departamentoSano, paisSano, codigoPostalSano
+            const [
+                nombreSano, apellidoSano, emailSano,
+                passwordSano, telefonoSano, edadSano,
+                direccionSano, ciudadSano, departamentoSano, paisSano,
+                codigoPostalSano
+            ] = user
 
-           const [resultado] = await mysqlPromesa(
+            await mysqlPromesa(
                 "CALL registrar_usuario(?,?,?,?,?,?,?,?,?,?,?,@resultado, @exito)",
                 nombreSano, apellidoSano, emailSano,
                 passwordSano, telefonoSano, edadSano,
-                direccionSano, ciudadSano, departamentoSano, 
+                direccionSano, ciudadSano, departamentoSano,
                 paisSano, codigoPostalSano
             );
 
             // Consulta para obtener los valores de salida de @exito y @resultado
             const [resu] = await mysqlPromesa("SELECT @exito AS exito, @resultado AS mensaje_resultado");
 
-     
-            console.log(nombreSano)
+
+            console.log(resu)
             return {
                 error: false,
-                message:"Se ha registrado correctamente",
+                message: "Se ha registrado correctamente",
                 usuario: nombreSano,
                 id: resu.insertId
             }
@@ -95,7 +93,7 @@ export class User {
 
     //esto valida usuario
     static isValid(nombreSano) {
-     
+
         let message;
 
 
