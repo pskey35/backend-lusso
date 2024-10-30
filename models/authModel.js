@@ -15,6 +15,7 @@ export class User {
 
             /* 
             
+            esto de aqui si da normal
             await mysqlPromesa(
                  "CALL registrar_usuario(?,?,?,?,?,?,?,?,?,?,?,@resultado, @exito)",
                  nombreSano, apellidoSano, emailSano,
@@ -27,20 +28,33 @@ export class User {
              const [resu] = await mysqlPromesa("SELECT @exito AS exito, @resultado AS mensaje_resultado");
  */
 
+           
+    
+            // Llamada al procedimiento almacenado
             await mysqlPromesa(
-                "CALL registrar_usuario(?,?,?,?,?,?,?,?,?,?,?,@p_exito, @p_resultado, @p_id_usuario, @p_nombre_usuario)",
-                nombreSano, apellidoSano, emailSano,
-                passwordSano, telefonoSano, edadSano,
-                direccionSano, ciudadSano, departamentoSano,
-                paisSano, codigoPostalSano
+                `CALL registrar_usuario(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @p_exito, @p_resultado, 
+                @p_id_usuario, @p_nombre_usuario);`,
+                [
+                    nombreSano, apellidoSano, emailSano,
+                    passwordSano, telefonoSano, edadSano,
+                    direccionSano, ciudadSano, departamentoSano,
+                    paisSano, codigoPostalSano
+                ]
             );
-
-            const [resu] = await mysqlPromesa(" SELECT @p_exito AS exito, @p_resultado AS resultado, @p_id_usuario AS id_usuario, @p_nombre_usuario AS nombre_usuario")
-            console.log("morty debuggin")
-            console.log(resu)
+            
+    
+            // Consulta para obtener los valores de salida
+            const [resu] = await mysqlPromesa(`
+                SELECT @p_exito AS exito, 
+                       @p_resultado AS mensaje_resultado, 
+                       @p_id_usuario AS id_usuario,
+                       @p_nombre_usuario AS nombre_usuario;
+            `);
+    
+            //console.log("waza ya dio xd--")
+            console.log(resu);
             
 
-            console.log(resu)
             return {
                 error: false,
                 message: "Se ha registrado correctamente",
