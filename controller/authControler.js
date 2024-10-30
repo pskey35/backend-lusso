@@ -20,17 +20,17 @@ export const registerControler = async (req, res) => {
     const codigoPostalSano = xss(req.body?.codigoPostal || ""); // Se agrega el manejo de undefined
 
 
-/*
-    const boleanoEmail = User.correoExist(emailSano)
-    if (boleanoEmail) {
-        //si el email ya estaba registrado en la database entra aqui
-        return res.status(401).json({
-            error: true,
-            message: "Este email ya ha sido registrado prueba con otro"
-        })
-    }
-
-*/
+    /*
+        const boleanoEmail = User.correoExist(emailSano)
+        if (boleanoEmail) {
+            //si el email ya estaba registrado en la database entra aqui
+            return res.status(401).json({
+                error: true,
+                message: "Este email ya ha sido registrado prueba con otro"
+            })
+        }
+    
+    */
 
     const { error, message } = User.isValid(nombreSano)
 
@@ -41,34 +41,44 @@ export const registerControler = async (req, res) => {
             message,
         })
 
-    } 
-     
+    }
 
 
-    
+
+
     const passwordValid = await User.isValidPassword(passwordSano)
 
     if (passwordValid) {
         console.log("sa")
         //si password es valido entonces se registra en la database 
         //y se le da un token jwt
-        const {error,message,id,} = await User.registrar_usuario(
-            [nombreSano, apellidoSano,emailSano, 
-             passwordSano, telefonoSano, edadSano,
-             direccionSano,ciudadSano,departamentoSano,
-              paisSano, codigoPostalSano
-        ])
+        const { error, message, id,usuario } = await User.registrar_usuario(
+            [nombreSano, apellidoSano, emailSano,
+                passwordSano, telefonoSano, edadSano,
+                direccionSano, ciudadSano, departamentoSano,
+                paisSano, codigoPostalSano
+            ])
 
-       
-        console.log("id usuario::",id)
-        console.log("nombr usuaroi::",nombreSano)
-        const token = jwt.sign({id,nombreSano},"secretKey")
-      
-        return res.json({error,message,token})
-    }else{
+
+        console.log("id usuario::", id)
+        console.log("nombr usuaroi::", nombreSano)
+
+
+        if (error) {
+            //si hay error por ejemplo al haber 2 emails iguales en datbase entra aqui
+            return res.json({ error, message })
+        } else {
+            const token = jwt.sign({ id, usuario }, "secretKey")
+
+            return res.json({ error, message, token })
+        }
+
+
+
+    } else {
         return res.status(401).json(
             {
-                error:"introduzca una password mas seguro"
+                error: "introduzca una password mas seguro"
             }
         )
     }
@@ -79,14 +89,14 @@ export const registerControler = async (req, res) => {
 
     //si no hay error entra aqui
     //hacer consulta de sql para recibir el id de tal usuario
-/*
-    token = jwt.sign({ id: 12, usuario: "juanito" }, "secretKey")
-    return res.status(200).json({
-        error: false,
-        token,
-        message: "Se ha creado su cuenta exitosamente",
-    })
-*/
+    /*
+        token = jwt.sign({ id: 12, usuario: "juanito" }, "secretKey")
+        return res.status(200).json({
+            error: false,
+            token,
+            message: "Se ha creado su cuenta exitosamente",
+        })
+    */
 
 
 }

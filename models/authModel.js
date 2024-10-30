@@ -28,38 +28,74 @@ export class User {
              const [resu] = await mysqlPromesa("SELECT @exito AS exito, @resultado AS mensaje_resultado");
  */
 
+
+
+            /*
+           esto no da
+           // Llamada al procedimiento almacenado
+           await mysqlPromesa(
+               `CALL registrar_usuario(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @p_exito, @p_resultado, 
+               @p_id_usuario, @p_nombre_usuario);`,
            
-    
+                   nombreSano, apellidoSano, emailSano,
+                   passwordSano, telefonoSano, edadSano,
+                   direccionSano, ciudadSano, departamentoSano,
+                   paisSano, codigoPostalSano
+               
+           );
+           
+   
+           // Consulta para obtener los valores de salida
+           const [resu] = await mysqlPromesa(`
+               SELECT @p_exito AS exito, 
+                      @p_resultado AS mensaje_resultado, 
+                      @p_id_usuario AS id_usuario,
+                      @p_nombre_usuario AS nombre_usuario;
+           `);
+   
+           //console.log("waza ya dio xd--")
+           console.log(resu);*/
+
+
             // Llamada al procedimiento almacenado
             await mysqlPromesa(
-                `CALL registrar_usuario(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @p_exito, @p_resultado, 
-                @p_id_usuario, @p_nombre_usuario);`,
-                [
-                    nombreSano, apellidoSano, emailSano,
-                    passwordSano, telefonoSano, edadSano,
-                    direccionSano, ciudadSano, departamentoSano,
-                    paisSano, codigoPostalSano
-                ]
+                `CALL registrar_usuario(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @p_exito, @p_resultado, @p_id_usuario, @p_nombre_usuario)`,
+
+                nombreSano, apellidoSano, emailSano,
+                passwordSano, telefonoSano, edadSano,
+                direccionSano, ciudadSano, departamentoSano,
+                paisSano, codigoPostalSano
+
             );
-            
-    
-            // Consulta para obtener los valores de salida
+
+            // Consulta para obtener los valores de salida de las variables de MySQL
             const [resu] = await mysqlPromesa(`
-                SELECT @p_exito AS exito, 
-                       @p_resultado AS mensaje_resultado, 
-                       @p_id_usuario AS id_usuario,
-                       @p_nombre_usuario AS nombre_usuario;
-            `);
-    
-            //console.log("waza ya dio xd--")
-            console.log(resu);
-            
+    SELECT @p_exito AS exito, 
+           @p_resultado AS mensaje_resultado, 
+           @p_id_usuario AS id_usuario,
+           @p_nombre_usuario AS nombre_usuario;
+`);
+
+            console.log("ya dio---")
+            console.log(resu)
+            console.log(resu.id_usuario)
+            console.log(resu.nombre_usuario)
+
+
+            if (resu.id_usuario == null && resu.nombre_usuario == null) {
+                //aqui entra solo si el correo ya habia sido registrado
+                return {
+                    error: true,
+                    message: "Este correo ya ha sido registrado anteriormente,prueba con otro",
+
+                }
+            }
 
             return {
                 error: false,
                 message: "Se ha registrado correctamente",
-                usuario: nombreSano,
-                id: resu.insertId
+                usuario: resu.nombre_usuario,
+                id: resu.id_usuario
             }
 
         } catch (error) {
