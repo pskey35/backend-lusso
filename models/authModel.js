@@ -13,17 +13,32 @@ export class User {
                 codigoPostalSano
             ] = user
 
+            /* 
+            
             await mysqlPromesa(
-                "CALL registrar_usuario(?,?,?,?,?,?,?,?,?,?,?,@resultado, @exito)",
+                 "CALL registrar_usuario(?,?,?,?,?,?,?,?,?,?,?,@resultado, @exito)",
+                 nombreSano, apellidoSano, emailSano,
+                 passwordSano, telefonoSano, edadSano,
+                 direccionSano, ciudadSano, departamentoSano,
+                 paisSano, codigoPostalSano
+             );
+ 
+             // Consulta para obtener los valores de salida de @exito y @resultado
+             const [resu] = await mysqlPromesa("SELECT @exito AS exito, @resultado AS mensaje_resultado");
+ */
+
+            await mysqlPromesa(
+                "CALL registrar_usuario(?,?,?,?,?,?,?,?,?,?,?,@p_exito, @p_resultado, @p_id_usuario, @p_nombre_usuario)",
                 nombreSano, apellidoSano, emailSano,
                 passwordSano, telefonoSano, edadSano,
                 direccionSano, ciudadSano, departamentoSano,
                 paisSano, codigoPostalSano
             );
 
-            // Consulta para obtener los valores de salida de @exito y @resultado
-            const [resu] = await mysqlPromesa("SELECT @exito AS exito, @resultado AS mensaje_resultado");
-
+            const [resu] = await mysqlPromesa(" SELECT @p_exito AS exito, @p_resultado AS resultado, @p_id_usuario AS id_usuario, @p_nombre_usuario AS nombre_usuario")
+            console.log("morty debuggin")
+            console.log(resu)
+            
 
             console.log(resu)
             return {
