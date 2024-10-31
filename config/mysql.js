@@ -14,8 +14,6 @@ const connection = mysql.createPool({
 
 
 
-
-
 export const mysqlPromesa = (consulta,values)=>{
 
   return new Promise((resolve,reject)=>{
