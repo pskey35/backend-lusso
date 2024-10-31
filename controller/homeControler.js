@@ -1,7 +1,6 @@
 import path from "path"
 import { fileURLToPath } from "url"
 import fs from "fs"
-import v2 from "cloudinary"
 
 
 export function homeFunction(req, res) {
