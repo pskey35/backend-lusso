@@ -110,12 +110,44 @@ export class User {
     }
 
 
-    static async Login(user, password) {
-        try {
 
-            await mysqlPromesa("")
+
+    static async Login(correo, password) {
+        try {
+         
+
+            //si da con "jualkasdfj" poniendolo manualmente
+            //  await mysqlPromesa(`CALL login_usuario(?,?,@exito,@resultado,@id_usuario,@nombre,@apellido)`, correo, password)
+            await mysqlPromesa(`CALL login_usuario( "${correo}", "${password}", @exito, @resultado, @id_usuario, @nombre, @apellido) `,);
+      
+            const [resu] = await mysqlPromesa(`SELECT @exito AS exito, 
+                @resultado AS resultado,
+                @id_usuario AS id_usuario,
+                 @nombre AS nombre, 
+                 @apellido AS apellido`)
+
+
+                console.log(resu)
+            if(resu.exito == false){
+                console.log(resu)
+                throw "Correo no registrado"
+            }                
+
+            return {
+                booleanSuccesLogin: resu.exito == 1 ? true : false,
+                id:resu.id_usuario,
+                usuario:resu.nombre
+            }
+
         } catch (error) {
             console.log("hubo un error al loguearse")
+            console.log(error)
+            return {
+                booleanSuccesLogin: false,
+                error: true,
+                message: error
+            }
+
         }
     }
 
