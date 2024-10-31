@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken"
 //este middelware servira para proximos endpoints
 export const authToken = (req, res, next) => {
 
@@ -10,6 +11,19 @@ export const authToken = (req, res, next) => {
         //si no hay token mandamos error
         return res.status(400).json({ message: "Acceso denegado" })
     }
+
+
+
+    jwt.verify(token,"secretKey",(err,decode)=>{
+    
+        if(err){
+            return res.status(401).json({error:"Token invalid"})
+        }else{
+            next()
+        }
+    })
+
+
 
     next()
 }
