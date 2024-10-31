@@ -1,14 +1,13 @@
 import express from "express"
 import controler from "../controller/authControler.js"
 import {authToken} from "../utils/middlewareAuth.js"
-
+//aqui no se neceista el authToken
 
 const routerAuth = express.Router()
 
 
-routerAuth.post("/login",authToken,controler.loginControler)
+routerAuth.post("/login",controler.loginControler)
 
-//routerAuth.post("/register",authToken,controler.registerControler)
 routerAuth.post("/register",controler.registerControler)
 
 
