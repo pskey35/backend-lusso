@@ -3,7 +3,7 @@ import { User } from "../models/authModel.js"
 import jwt from "jsonwebtoken"
 
 
-export const registerControler = async (req, res) => {
+const registerControler = async (req, res) => {
     const nombreSano = xss(req.body.name.trim())
     const apellidoSano = xss(req.body.apellido.trim())
     const emailSano = xss(req.body.email.trim())
@@ -52,7 +52,7 @@ export const registerControler = async (req, res) => {
         console.log("sa")
         //si password es valido entonces se registra en la database 
         //y se le da un token jwt
-        const { error, message, id,usuario } = await User.registrar_usuario(
+        const { error, message, id, usuario } = await User.registrar_usuario(
             [nombreSano, apellidoSano, emailSano,
                 passwordSano, telefonoSano, edadSano,
                 direccionSano, ciudadSano, departamentoSano,
@@ -102,27 +102,40 @@ export const registerControler = async (req, res) => {
 }
 
 
-const loginControler = (req, res) => {
-    const { username, password } = req.body;
+const loginControler = async (req, res) => {
+    const { correo, password } = req.body;
 
-    const inputSanoUser = xss(req.body.username)
-    const inputSanoPass = xss(req.body.password)
+    const inputSanoUser = xss(correo)
+    const inputSanoPassword = xss(password)
 
 
     //aqui se llamaria un procedure storage del backend 
-    //si el usuario coincide con la password entonces
+    //si el usuario coincide con la password
+
+    //entonces
     //devolvemos el jwt caso contrario no
-    if (true) {
-        //el id se genera de database 
-        const token = jwt.sign({ id: 3, username: inputSanoUser }, "secretKey")
+
+
+    const { booleanSuccesLogin,id,usuario,message} = await User.Login(inputSanoUser, inputSanoPassword)
+
+    if (booleanSuccesLogin) {
+
+        
+        const token = jwt.sign({ id, usuario}, "secretKey")
 
         return res.status(200).json({
             token: token,
             message: "Se ha logeado con exito",//llega esto y se hace redireccion en el frontend
-            error: false
+            error: false,
+           
+        })
+    }else{
+        return res.status(404).json({
+            error:true,
+            message
+
         })
     }
-
 
 }
 
