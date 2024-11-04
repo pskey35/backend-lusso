@@ -4,8 +4,7 @@ export const authToken = (req, res, next) => {
 
     //esto es para el middleware y autenticar en los endpoints que se requiera
     console.log(req.headers)
-    const token = req.headers["authorization"]
-
+    const token = req.headers["authorization"].split(" ")[1]
 
     if (!token) {
         //si no hay token mandamos error

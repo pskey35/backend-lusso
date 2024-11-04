@@ -14,12 +14,12 @@ const connection = mysql.createPool({
 
 
 
-export const mysqlPromesa = (consulta,values)=>{
-
-  return new Promise((resolve,reject)=>{
-    connection.query(consulta,values,(err,query)=>{
-      if(err){
-        reject(err) 
+export const mysqlPromesa = (consulta, values) => {
+  console.log(values)
+  return new Promise((resolve, reject) => {
+    connection.query(consulta, values, (err, query) => {
+      if (err) {
+        reject(err)
       }
       resolve(query)
     })
