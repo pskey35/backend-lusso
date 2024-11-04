@@ -20,7 +20,7 @@ export const handlerImages = async (req, res) => {
                     else resolve(result);
                 }
             );
-
+        
             stream.end(req.file.buffer); // Aquí enviamos el buffer directamente
         });
 
