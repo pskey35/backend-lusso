@@ -3,6 +3,7 @@ import { User } from "../models/authModel.js"
 import jwt from "jsonwebtoken"
 
 
+
 const registerControler = async (req, res) => {
     const nombreSano = xss(req.body.name.trim())
     const apellidoSano = xss(req.body.apellido.trim())
@@ -116,22 +117,22 @@ const loginControler = async (req, res) => {
     //devolvemos el jwt caso contrario no
 
 
-    const { booleanSuccesLogin,id,usuario,message} = await User.Login(inputSanoUser, inputSanoPassword)
+    const { booleanSuccesLogin, id, usuario, message } = await User.Login(inputSanoUser, inputSanoPassword)
 
     if (booleanSuccesLogin) {
 
-        
-        const token = jwt.sign({ id, usuario}, "secretKey")
+
+        const token = jwt.sign({ id, usuario }, "secretKey")
 
         return res.status(200).json({
             token: token,
             message: "Se ha logeado con exito",//llega esto y se hace redireccion en el frontend
             error: false,
-           
+
         })
-    }else{
+    } else {
         return res.status(404).json({
-            error:true,
+            error: true,
             message
 
         })
@@ -140,4 +141,34 @@ const loginControler = async (req, res) => {
 }
 
 
-export default { registerControler, loginControler }
+const forgotPassword = async (req, res) => {
+    const email = xss(req.body.correo)
+
+
+
+    //en el backend se tiene que verificar si ese email existe
+
+
+    if (await User.correoExist(email)) {
+        //si el correo existe en la database entonces entra aqui
+        const token = jwt.sign({ email }, "secretKey", { expiresIn: "5m" })
+        const sendEmailToken = `https://localhost:8000/reset-password?token=${token}`
+        
+
+
+        //se necesita configurar un email en donde se envie el sendEmailToken y 
+        //y el usuario desde ahi entrara
+        //enviamos al correo del usuario este token (falta esto)
+
+
+        res.json({
+            error:false,
+            message:"se ha enviado un codigo de verificacion a tu email"
+        })
+    }
+
+    //y se redirige a tal ruta especial 
+}
+
+
+export default { registerControler, loginControler, forgotPassword }
