@@ -4,67 +4,11 @@ export class User {
 
     static async registrar_usuario(...user) {
         try {
-            //nombreSano,apellidoSano,emailSano,passwordSano, --- 
-            //opcionales::: telefonoSano, edadSano, direccionSano,departamentoSano, paisSano, codigoPostalSano
-            const [
-                nombreSano, apellidoSano, emailSano,
-                passwordSano, telefonoSano, edadSano,
-                direccionSano, ciudadSano, departamentoSano, paisSano,
-                codigoPostalSano
-            ] = user
-
-            /* 
-            
-            esto de aqui si da normal
-            await mysqlPromesa(
-                 "CALL registrar_usuario(?,?,?,?,?,?,?,?,?,?,?,@resultado, @exito)",
-                 nombreSano, apellidoSano, emailSano,
-                 passwordSano, telefonoSano, edadSano,
-                 direccionSano, ciudadSano, departamentoSano,
-                 paisSano, codigoPostalSano
-             );
- 
-             // Consulta para obtener los valores de salida de @exito y @resultado
-             const [resu] = await mysqlPromesa("SELECT @exito AS exito, @resultado AS mensaje_resultado");
- */
-
-
-
-            /*
-           esto no da
-           // Llamada al procedimiento almacenado
-           await mysqlPromesa(
-               `CALL registrar_usuario(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @p_exito, @p_resultado, 
-               @p_id_usuario, @p_nombre_usuario);`,
-           
-                   nombreSano, apellidoSano, emailSano,
-                   passwordSano, telefonoSano, edadSano,
-                   direccionSano, ciudadSano, departamentoSano,
-                   paisSano, codigoPostalSano
-               
-           );
-           
-   
-           // Consulta para obtener los valores de salida
-           const [resu] = await mysqlPromesa(`
-               SELECT @p_exito AS exito, 
-                      @p_resultado AS mensaje_resultado, 
-                      @p_id_usuario AS id_usuario,
-                      @p_nombre_usuario AS nombre_usuario;
-           `);
-   
-           //console.log("waza ya dio xd--")
-           console.log(resu);*/
-
-
             // Llamada al procedimiento almacenado
             await mysqlPromesa(
                 `CALL registrar_usuario(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @p_exito, @p_resultado, @p_id_usuario, @p_nombre_usuario)`,
 
-                nombreSano, apellidoSano, emailSano,
-                passwordSano, telefonoSano, edadSano,
-                direccionSano, ciudadSano, departamentoSano,
-                paisSano, codigoPostalSano
+                ...user
 
             );
 
@@ -76,10 +20,9 @@ export class User {
            @p_nombre_usuario AS nombre_usuario;
 `);
 
-            console.log("ya dio---")
+
             console.log(resu)
-            console.log(resu.id_usuario)
-            console.log(resu.nombre_usuario)
+
 
 
             if (resu.id_usuario == null && resu.nombre_usuario == null) {
@@ -109,34 +52,39 @@ export class User {
         }
     }
 
-
-
-
     static async Login(correo, password) {
         try {
-         
+
 
             //si da con "jualkasdfj" poniendolo manualmente
             //  await mysqlPromesa(`CALL login_usuario(?,?,@exito,@resultado,@id_usuario,@nombre,@apellido)`, correo, password)
-            await mysqlPromesa(`CALL login_usuario( "${correo}", "${password}", @exito, @resultado, @id_usuario, @nombre, @apellido) `,);
-      
+            //await mysqlPromesa(`CALL login_usuario( "${correo}", "${password}", @exito, @resultado, @id_usuario, @nombre, @apellido) `);
+
+
+            await mysqlPromesa(`CALL login_usuario( ? , ?, @exito, @resultado, @id_usuario, @nombre, @apellido) `, [correo, password]);
+
+
+            console.log(correo, password)
+
             const [resu] = await mysqlPromesa(`SELECT @exito AS exito, 
                 @resultado AS resultado,
                 @id_usuario AS id_usuario,
                  @nombre AS nombre, 
                  @apellido AS apellido`)
 
+            console.log("modelo login")
+            console.log(resu)
 
-                console.log(resu)
-            if(resu.exito == false){
-                console.log(resu)
+
+            if (resu.exito == 0) {
                 throw "Correo no registrado"
-            }                
+            }
+
 
             return {
                 booleanSuccesLogin: resu.exito == 1 ? true : false,
-                id:resu.id_usuario,
-                usuario:resu.nombre
+                id: resu.id_usuario,
+                usuario: resu.nombre
             }
 
         } catch (error) {
@@ -175,7 +123,8 @@ export class User {
     }
 
 
-    static async correoExist() {
+    static async correoExist(email) {
+
         try {
             const boleano = await mysqlPromesa("")
             if (boleano) {
