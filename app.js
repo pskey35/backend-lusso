@@ -10,6 +10,7 @@ import dashboard from "./routes/dashboard.js"
 import { fileURLToPath } from 'url';
 import dotenv from "dotenv"
 import images from "./routes/images.js"
+import categoriaRouter from "./routes/categoriaRouter.js"
 
 
 
@@ -26,7 +27,7 @@ app.use(express.static(path.join(fileURLToPath(import.meta.url), 'public')));
 
 
 
-app.use(home, auth, images,dashboard)
+app.use(home, auth, images,dashboard,categoriaRouter)
 
 
 
