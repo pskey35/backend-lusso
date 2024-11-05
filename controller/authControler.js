@@ -21,17 +21,6 @@ const registerControler = async (req, res) => {
     const codigoPostalSano = xss(req.body?.codigoPostal || ""); // Se agrega el manejo de undefined
 
 
-    /*
-        const boleanoEmail = User.correoExist(emailSano)
-        if (boleanoEmail) {
-            //si el email ya estaba registrado en la database entra aqui
-            return res.status(401).json({
-                error: true,
-                message: "Este email ya ha sido registrado prueba con otro"
-            })
-        }
-    
-    */
 
     const { error, message } = User.isValid(nombreSano)
 
