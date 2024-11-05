@@ -1,71 +1,25 @@
 import express from "express"
-
 import { mysqlPromesa } from "../config/mysql.js"
-
+import { editByIdCategories, readAllCategories } from "../controller/categoriaControler.js"
+import { selectByIdCategories } from "../controller/categoriaControler.js"
+import { addCategories } from "../controller/categoriaControler.js"
+import { deleteByIdCategories } from "../controller/categoriaControler.js"
 
 const router = express.Router()
 
 
-/*
-PARA AGREGAR
-pool.query('CALL agregar_categoria(?);', [nombre])
-
-PARA EDITAR
-pool.query('CALL actualizar_categoria(?, ?);', [id_categoria, nombre])
-
-PARA ELIMINAR
-pool.query('CALL eliminar_categoria(?);', [id_categoria])
-*/
-
-router.get("/categorias", (req, res) => {
-    const [result] = mysqlPromesa("CALL leer_categorias()")
-
-    if (!result) {
-        res.json({ error: true })
-        return;
-    }
-
-    res.json({ data: result })
-
-})
+router.get("/categorias", readAllCategories)
 
 
-router.get("/categoria/:idCategoria", (req, res) => {
-    const id_categoria = req.params.idCategoria
+router.get("/categoria/:id_categoria", selectByIdCategories)
 
-    const [result] = mysqlPromesa('CALL leer_categoria(?);', [id_categoria])
-
-    if (!result) {
-        res.json({ error: true })
-        return
-    }
+router.post("/addCategoria", addCategories)
 
 
-    res.json({ error: false, data: result })
-
-})
-
-router.post("/addCategoria", (req, res) => {
-
-    const categoria = req.body.addCategoria
-
-    mysqlPromesa('CALL agregar_categoria(?);', [categoria])
-})
+router.post("/editCategoria", editByIdCategories)
 
 
-router.post("/editCategoria", (req, res) => {
-    const id_categoria = req.body.id_categoria
-    const nombre = req.body.nombre
-
-
-    mysqlPromesa('CALL actualizar_categoria(?, ?);', [id_categoria, nombre])
-})
-
-
-router.post("/deleteCategoria", (req, res) => {
-    const id_categoria = req.body.id_categoria
-    mysqlPromesa('CALL eliminar_categoria(?);', [id_categoria])
-})
+router.post("/deleteCategoria", deleteByIdCategories)
 
 
 
