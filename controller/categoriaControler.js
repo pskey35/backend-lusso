@@ -1,6 +1,6 @@
 import { mysqlPromesa } from "../config/mysql.js"
 
-export const readAllCategories = async (req, res) => {
+const readAllCategories = async (req, res) => {
     const [data] = await mysqlPromesa("CALL leer_categorias(@exito,@mensaje)")
 
 
@@ -23,7 +23,7 @@ export const readAllCategories = async (req, res) => {
 
 
 
-export const selectByIdCategories = async (req, res) => {
+const selectByIdCategories = async (req, res) => {
     const id_categoria = req.params.id_categoria
 
     const [data] = await mysqlPromesa('CALL leer_categoria(?,@exito,@mensaje);', [id_categoria])
@@ -43,7 +43,7 @@ export const selectByIdCategories = async (req, res) => {
 
 
 
-export const addCategories = async (req, res) => {
+const addCategories = async (req, res) => {
 
     const categoria = req.body.addCategoria
     console.log("categoira controler:::", categoria)
@@ -69,7 +69,7 @@ export const addCategories = async (req, res) => {
 
 
 
-export const editByIdCategories = async (req, res) => {
+ const editByIdCategories = async (req, res) => {
     const id_categoria = req.body.id_categoria
     const nombre = req.body.nombre
 
@@ -91,7 +91,7 @@ export const editByIdCategories = async (req, res) => {
 
 
 
-export const deleteByIdCategories = async (req, res) => {
+const deleteByIdCategories = async (req, res) => {
     const id_categoria = req.body.id_categoria
 
 
@@ -111,3 +111,7 @@ export const deleteByIdCategories = async (req, res) => {
     
 
 }
+
+
+
+export default {readAllCategories,selectByIdCategories,addCategories,deleteByIdCategories}
