@@ -1,11 +1,11 @@
 import express from "express"
-
 import cors from "cors"
 import home from "./routes/routerHome.js"
 import auth from "./routes/auth.js"
 import path from "path"
 //import search from "./routes/search.js"
 import dashboard from "./routes/dashboard.js"
+import products from "./routes/productos.js"
 
 import { fileURLToPath } from 'url';
 import dotenv from "dotenv"
@@ -27,7 +27,7 @@ app.use(express.static(path.join(fileURLToPath(import.meta.url), 'public')));
 
 
 
-app.use(home, auth, images,dashboard,categoriaRouter)
+app.use(home, auth, images,dashboard,categoriaRouter,products)
 
 
 
