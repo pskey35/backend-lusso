@@ -1,5 +1,4 @@
 import express from "express"
-import { mysqlPromesa } from "../config/mysql.js"
 import { editByIdCategories, readAllCategories } from "../controller/categoriaControler.js"
 import { selectByIdCategories } from "../controller/categoriaControler.js"
 import { addCategories } from "../controller/categoriaControler.js"
@@ -13,13 +12,18 @@ router.get("/categorias", readAllCategories)
 
 router.get("/categoria/:id_categoria", selectByIdCategories)
 
+
+router.post("/deleteCategoria", deleteByIdCategories)
+
 router.post("/addCategoria", addCategories)
+
+
+
+
 
 
 router.post("/editCategoria", editByIdCategories)
 
-
-router.post("/deleteCategoria", deleteByIdCategories)
 
 
 
