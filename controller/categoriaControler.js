@@ -1,46 +1,68 @@
+import { mysqlPromesa } from "../config/mysql.js"
+
 export const readAllCategories = async (req, res) => {
-    const [result] = await mysqlPromesa("CALL leer_categorias()", "")
+    const [data] = await mysqlPromesa("CALL leer_categorias(@exito,@mensaje)")
 
-    console.log(result)
 
-    if (!result) {
-        res.json({ error: true })
+    const [result] = await mysqlPromesa("SELECT @exito AS exito, @mensaje AS mensaje")
+
+
+
+    if (result.exito == 1) {
+        res.json({ error: false, data, message: result.mensaje })
         return;
     }
 
-    res.json({ data: result })
+
+
+    res.json({ error: true, mensaje: result.mensaje })
 
 }
+
+
+
 
 
 export const selectByIdCategories = async (req, res) => {
     const id_categoria = req.params.id_categoria
 
-    const [result] = await mysqlPromesa('CALL leer_categoria(?);', [id_categoria])
+    const [data] = await mysqlPromesa('CALL leer_categoria(?,@exito,@mensaje);', [id_categoria])
 
-    if (!result) {
-        res.json({ error: true })
-        return
+    const [result] = await mysqlPromesa(`SELECT @exito AS exito,@mensaje AS mensaje`)
+
+
+
+    if (result.exito == 1) {
+        res.json({ error: false, message: result.mensaje, data })
+        return;
     }
 
 
-    res.json({ error: false, data: result })
+    res.json({ error: true, message: result.mensaje })
 }
 
 
 
 export const addCategories = async (req, res) => {
-    try {
-        const categoria = req.body.addCategoria
-        console.log("categoira controler:::", categoria)
-        const result = await mysqlPromesa('CALL agregar_categoria(?);', [categoria])
-        res.json({ error: false, data: result })
-    } catch (error) {
-        console.log(error)
+
+    const categoria = req.body.addCategoria
+    console.log("categoira controler:::", categoria)
+
+    await mysqlPromesa('CALL agregar_categoria(?,@exito,@mensaje);', [categoria])
 
 
-        res.json({ error: true, message: error })
+    const [result] = await mysqlPromesa(`SELECT @exito AS exito,
+            @mensaje AS mensaje`)
+
+
+    if (result.exito == 1) {
+        res.json({ error: false, message: result.mensaje })
+        return;
     }
+
+
+    res.json({ error: true, message: result.mensaje })
+
 
 
 }
@@ -52,8 +74,19 @@ export const editByIdCategories = async (req, res) => {
     const nombre = req.body.nombre
 
 
-    const result = await mysqlPromesa('CALL actualizar_categoria(?, ?);', [id_categoria, nombre])
-    res.json({ data: result })
+    await mysqlPromesa('CALL actualizar_categoria(?, ?,@exito,@mensaje);', [id_categoria, nombre])
+
+
+    const [result] = await mysqlPromesa("SELECT @exito AS exito, @mensaje AS mensaje")
+
+
+    if (result.exito == 1) {
+        res.json({ error: false, message: result.mensaje })
+        return;
+    }
+
+
+    res.json({ error: true, message: result.mensaje })
 }
 
 
@@ -61,13 +94,20 @@ export const editByIdCategories = async (req, res) => {
 export const deleteByIdCategories = async (req, res) => {
     const id_categoria = req.body.id_categoria
 
-    console.log("categoria a eliminar", id_categoria)
 
-    const result = await mysqlPromesa('CALL eliminar_categoria(?)', [id_categoria])
+    const data = await mysqlPromesa('CALL eliminar_categoria(?,@exito,@mensaje)', [id_categoria])
 
-    if (!result) {
-        res.json({ error: true })
+    const [result] = await mysqlPromesa("SELECT @exito AS exito,@mensaje AS mensaje")
+
+
+    if(result.exito == 1){
+        res.json({error:false,mensaje:result.mensaje,data})
+        return;
     }
-    res.json({ data: result })
+
+
+    res.json({error:true,mensaje:result.mensaje})
+
+    
 
 }
