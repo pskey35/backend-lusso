@@ -1,28 +1,23 @@
 import express from "express"
-import { editByIdCategories, readAllCategories } from "../controller/categoriaControler.js"
-import { selectByIdCategories } from "../controller/categoriaControler.js"
-import { addCategories } from "../controller/categoriaControler.js"
-import { deleteByIdCategories } from "../controller/categoriaControler.js"
+import ControllerCategory from "../controller/categoriaControler.js"
+
 
 const router = express.Router()
 
 
-router.get("/categorias", readAllCategories)
+router.get("/categorias", (req,res)=>ControllerCategory.readAllCategories(req,res))
 
 
-router.get("/categoria/:id_categoria", selectByIdCategories)
+router.get("/categoria/:id_categoria", (req,res)=>ControllerCategory.selectByIdCategories(req,res))
 
 
-router.post("/deleteCategoria", deleteByIdCategories)
+router.post("/deleteCategoria", (req,res)=>ControllerCategory.deleteByIdCategories(req,res))
 
-router.post("/addCategoria", addCategories)
-
-
-
+router.post("/addCategoria",(req,res)=> ControllerCategory.addCategories(req,res))
 
 
 
-router.post("/editCategoria", editByIdCategories)
+router.post("/editCategoria",(req,res)=> ControllerCategory.editByIdCategories(req,res))
 
 
 
