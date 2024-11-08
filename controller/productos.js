@@ -12,7 +12,7 @@ export default class Products {
             return res.status(200).json({ error, message, data })
         }
 
-
+      
         return res.status(404).json({ error: true, message: message,data })
 
 
