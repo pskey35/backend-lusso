@@ -47,13 +47,53 @@ export default class ModelProducts {
 
 
 
-        }catch(e){
-            return {error:true,message:"There is an error",errorDescription:e}
+        } catch (e) {
+            return { error: true, message: "There is an error", errorDescription: e }
         }
-        
 
 
-      
+
+
+    }
+
+
+    static async postInsertProduct(dataReceived) {
+
+        try {
+            await mysqlPromesa("CALL insertar_producto(?,?,?,?,?,?,?,?,?,?,?,?,?,@exito,@mensaje)",
+                [dataReceived.name,
+                dataReceived.description,
+                dataReceived.price,
+                dataReceived.stock,
+                dataReceived.principal_img,
+                dataReceived.brand,
+                dataReceived.model,
+                dataReceived.dimention,
+                dataReceived.weight,
+                dataReceived.color,
+                dataReceived.material,
+                dataReceived.state,
+                dataReceived.category_id]
+            )
+
+            const [resu] = await mysqlPromesa("SELECT @exito AS success,@mensaje AS message")
+
+            if (resu.success == 0) {
+                return { error: true, message: resu.message }
+            }
+
+            return { error: false, message: resu.message }
+
+
+
+        }catch(e){
+            return {error:true,errorDetail:e}
+           
+        }
+
+       
+
+
     }
 
 }
