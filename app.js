@@ -1,6 +1,5 @@
 import express from "express"
 import cors from "cors"
-import home from "./routes/routerHome.js"
 import auth from "./routes/auth.js"
 import path from "path"
 //import search from "./routes/search.js"
@@ -27,7 +26,7 @@ app.use(express.static(path.join(fileURLToPath(import.meta.url), 'public')));
 
 
 
-app.use(home, auth, images,dashboard,categoriaRouter,products)
+app.use( auth, images,dashboard,categoriaRouter,products)
 
 
 
