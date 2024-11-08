@@ -1,24 +1,22 @@
-
 import { mysqlPromesa } from "../config/mysql.js"
-
+import ModelProducts from "../models/productos.js"
 
 
 export default class Products {
     static async getAllProducts(req, res) {
-        const [data] = await mysqlPromesa("CALL leer_productos(@exito,@mensaje)")
-        const [resu] = await mysqlPromesa("SELECT @exito AS exito, @mensaje AS mensaje")
+
+        const { error, message, data } = await ModelProducts.getAllProducts()
 
 
-
-        if (resu.exito == 0) {
-            return res.status(404).json({
-                error: true,
-                message: resu.mensaje
-            })
+        if (error == false) {
+            return res.status(200).json({ error, message, data })
         }
 
 
-        res.json({ data, message: resu.mensaje, error: false })
+        return res.status(404).json({ error: true, message: message,data })
+
+
+
 
     }
 
