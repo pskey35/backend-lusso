@@ -15,7 +15,7 @@ export default class ModelProducts {
 
             return { error: true, message: outputs.message, data }
         } catch (error) {
-       
+
             return { error }
         }
 
@@ -23,5 +23,37 @@ export default class ModelProducts {
 
     }
 
+    static async getProductsById(idParams) {
+
+
+
+        try {
+            if (isNaN(idParams)) {
+                //aqui entra si no es un numero
+                console.log("papu hubo error")
+                return { error: true, message: "Introduce an id valid" }
+            }
+
+
+            const data = await mysqlPromesa("CALL leer_producto(?,@exito,@mensaje)", parseInt(idParams))
+            const [resu] = await mysqlPromesa("SELECT @exito AS success,@mensaje AS message")
+
+            if (resu.success == 0) {
+                return { error: true, message: resu.message }
+            }
+
+
+            return { error: false, message: resu.message, data: data[0][0] }
+
+
+
+        }catch(e){
+            return {error:true,message:"There is an error",errorDescription:e}
+        }
+        
+
+
+      
+    }
 
 }
