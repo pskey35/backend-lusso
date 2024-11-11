@@ -1,16 +1,16 @@
 import express from "express"
 import cors from "cors"
-import auth from "./routes/auth.js"
-import path from "path"
+import authRouter from "./routes/authRouter.js"
+
 //import search from "./routes/search.js"
-import dashboard from "./routes/dashboard.js"
-import products from "./routes/productos.js"
-
+import categoryRouter from "./routes/categoryRouter.js"
+import dashboardRouter from "./routes/dashboardRouter.js"
+import productsRouter from "./routes/productsRouter.js"
+import imagesRouter from "./routes/imageRouter.js"
+import path from "node:path"
 import { fileURLToPath } from 'url';
-import dotenv from "dotenv"
-import images from "./routes/images.js"
-import categoriaRouter from "./routes/categoriaRouter.js"
 
+import dotenv from "dotenv"
 
 
 
@@ -26,7 +26,7 @@ app.use(express.static(path.join(fileURLToPath(import.meta.url), 'public')));
 
 
 
-app.use( auth, images,dashboard,categoriaRouter,products)
+app.use( authRouter, imagesRouter,dashboardRouter,categoryRouter,productsRouter)
 
 
 
