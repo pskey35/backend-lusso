@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 
 
 
-const registerControler = async (req, res) => {
+const registerController = async (req, res) => {
     const nombreSano = xss(req.body.name.trim())
     const apellidoSano = xss(req.body.apellido.trim())
     const emailSano = xss(req.body.email.trim())
@@ -22,7 +22,7 @@ const registerControler = async (req, res) => {
 
 
 
-    const { error, message } = User.isValid(nombreSano)
+    const { error, message } = User.isValidName(nombreSano)
 
     if (error) {
         //si el nombre de usuario no es valido entra aqui
@@ -42,7 +42,7 @@ const registerControler = async (req, res) => {
         console.log("sa")
         //si password es valido entonces se registra en la database 
         //y se le da un token jwt
-        const { error, message, id, usuario } = await User.registrar_usuario(
+        const { error, message, id, usuario } = await User.register(
             [nombreSano, apellidoSano, emailSano,
                 passwordSano, telefonoSano, edadSano,
                 direccionSano, ciudadSano, departamentoSano,
@@ -92,7 +92,7 @@ const registerControler = async (req, res) => {
 }
 
 
-const loginControler = async (req, res) => {
+const loginController = async (req, res) => {
     const { correo, password } = req.body;
 
     const inputSanoUser = xss(correo)
@@ -106,7 +106,7 @@ const loginControler = async (req, res) => {
     //devolvemos el jwt caso contrario no
 
 
-    const { booleanSuccesLogin, id, usuario, message } = await User.Login(inputSanoUser, inputSanoPassword)
+    const { booleanSuccesLogin, id, usuario, message } = await User.login(inputSanoUser, inputSanoPassword)
 
     if (booleanSuccesLogin) {
 
@@ -138,7 +138,7 @@ const forgotPassword = async (req, res) => {
     //en el backend se tiene que verificar si ese email existe
 
 
-    if (await User.correoExist(email)) {
+    if (await User.existEmail(email)) {
         //si el correo existe en la database entonces entra aqui
         const token = jwt.sign({ email }, "secretKey", { expiresIn: "5m" })
         const sendEmailToken = `https://localhost:8000/reset-password?token=${token}`
@@ -160,4 +160,4 @@ const forgotPassword = async (req, res) => {
 }
 
 
-export default { registerControler, loginControler, forgotPassword }
+export default { registerController, loginController, forgotPassword }

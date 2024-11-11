@@ -1,8 +1,13 @@
 import { mysqlPromesa } from "../config/mysql.js"
 
+
+
+
+
+
 export class User {
 
-    static async registrar_usuario(...user) {
+    static async register(...user) {
         try {
             // Llamada al procedimiento almacenado
             await mysqlPromesa(
@@ -21,7 +26,7 @@ export class User {
 `);
 
 
-            console.log(resu)
+           
 
 
 
@@ -52,7 +57,9 @@ export class User {
         }
     }
 
-    static async Login(correo, password) {
+
+
+    static async login(correo, password) {
         try {
 
 
@@ -100,6 +107,9 @@ export class User {
     }
 
 
+
+
+
     static async isValidPassword(password) {
         try {
 
@@ -123,7 +133,9 @@ export class User {
     }
 
 
-    static async correoExist(email) {
+
+
+    static async existEmail(email) {
 
         try {
             const boleano = await mysqlPromesa("")
@@ -137,8 +149,7 @@ export class User {
         }
     }
 
-    //esto valida usuario
-    static isValid(nombreSano) {
+    static isValidName(nombreSano) {
 
         let message;
 

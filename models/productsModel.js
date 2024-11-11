@@ -1,4 +1,3 @@
-
 import { mysqlPromesa } from "../config/mysql.js"
 
 export default class ModelProducts {
@@ -29,7 +28,6 @@ export default class ModelProducts {
 
         try {
             if (isNaN(idParams)) {
-                //aqui entra si no es un numero
                 console.log("papu hubo error")
                 return { error: true, message: "Introduce an id valid" }
             }
@@ -86,12 +84,68 @@ export default class ModelProducts {
 
 
 
-        }catch(e){
-            return {error:true,errorDetail:e}
-           
+        } catch (e) {
+            return { error: true, errorDetail: e }
+
         }
 
-       
+
+
+
+    }
+
+
+    static async deleteProduct(dataReceived) {
+
+        const idParams = dataReceived;
+
+        await mysqlPromesa("CALL eliminar_producto(?, @problem, @message)", idParams)
+        const [resu] = await mysqlPromesa("SELECT @problem AS error, @message AS message")
+
+
+        if (resu.error == 0) {
+
+            return { error: false, message: resu.message }
+        }
+
+
+
+
+
+        return { error: true, message: resu.message }
+
+
+
+    }
+
+
+    static async updateProduct(...dataReceived) {
+
+
+        console.log("model")
+        console.log(...dataReceived)
+        await mysqlPromesa("CALL actualizar_producto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,@problem,@message)",
+            ...dataReceived
+        )
+
+
+        
+        const [resu] = await mysqlPromesa("SELECT @problem AS error,@message AS message")
+
+
+        if(resu.error == 0){
+            return {error:false,message:resu.message}
+        }
+
+
+        return {error:true,message:resu.message}
+
+
+
+
+
+
+
 
 
     }
