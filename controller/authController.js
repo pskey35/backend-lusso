@@ -87,13 +87,6 @@ const loginController = async (req, res) => {
     const inputSanoPassword = xss(password)
 
 
-    //aqui se llamaria un procedure storage del backend 
-    //si el usuario coincide con la password
-
-    //entonces
-    //devolvemos el jwt caso contrario no
-
-
     const { booleanSuccesLogin, id, usuario, message } = await User.login(inputSanoUser, inputSanoPassword)
 
     if (booleanSuccesLogin) {
@@ -103,7 +96,7 @@ const loginController = async (req, res) => {
 
         return res.status(200).json({
             token: token,
-            message: "Se ha logeado con exito",//llega esto y se hace redireccion en el frontend
+            message: "You have logged in successfully",//llega esto y se hace redireccion en el frontend
             error: false,
 
         })
@@ -111,7 +104,6 @@ const loginController = async (req, res) => {
         return res.status(404).json({
             error: true,
             message
-
         })
     }
 
