@@ -1,5 +1,4 @@
 import express from "express"
-import { mysqlPromesa } from "../config/mysql.js"
 import ControllerProducts from "../controller/productController.js"
 
 const router = express.Router()
@@ -12,7 +11,6 @@ router.post("/add-product",(req,res)=>ControllerProducts.postInsertProduct(req,r
 
 
 router.delete("/delete-product/:id",(req,res)=>ControllerProducts.deleteProduct(req,res))
-
 router.put("/update-product/:id",(req,res)=>ControllerProducts.updateProduct(req,res))
 
 
