@@ -1,6 +1,8 @@
 import xss from "xss"
 import { User } from "../models/authModel.js"
 import jwt from "jsonwebtoken"
+import authValidator from "../utils/authValidator.js"
+
 
 
 
@@ -9,11 +11,16 @@ const registerController = async (req, res) => {
     const apellidoSano = xss(req.body.apellido.trim())
     const emailSano = xss(req.body.email.trim())
     const passwordSano = xss(req.body.password.trim())
+    const edadSano = xss((req.body.edad));
 
+    if (!nombreSano || !apellidoSano || !emailSano || !passwordSano || !edadSano) {
+        console.log("waza")
+        return res.status(401).json({ error: true, 
+            message: "Complete all the fields - name,lastName, password, age, email" })
+    }
 
     //esto de aca son opcionales
     const telefonoSano = xss((req.body?.telefono || "").trim());
-    const edadSano = xss((req.body?.edad || ""));
     const direccionSano = xss((req.body?.direccion || "").trim()); // Se agrega el manejo de undefined
     const ciudadSano = xss((req.body?.ciudad || "").trim()); // Se agrega el manejo de undefined
     const departamentoSano = xss((req.body?.departamento || "").trim()); // Se agrega el manejo de undefined
@@ -22,7 +29,7 @@ const registerController = async (req, res) => {
 
 
 
-    const { error, message } = User.isValidName(nombreSano)
+    const { error, message } = authValidator.isValidName(nombreSano)
 
     if (error) {
         //si el nombre de usuario no es valido entra aqui
@@ -30,18 +37,17 @@ const registerController = async (req, res) => {
             error,
             message,
         })
-
     }
 
 
 
 
-    const passwordValid = await User.isValidPassword(passwordSano)
+    const { isValidPasswordBoolean, messageAuthValidator } = authValidator.isValidPassword(passwordSano)
 
-    if (passwordValid) {
-        console.log("sa")
+    if (isValidPasswordBoolean) {
+        console.log("entro aqi")
         //si password es valido entonces se registra en la database 
-        //y se le da un token jwt
+        //y se le da un token jwt al usuario
         const { error, message, id, usuario } = await User.register(
             [nombreSano, apellidoSano, emailSano,
                 passwordSano, telefonoSano, edadSano,
@@ -50,17 +56,13 @@ const registerController = async (req, res) => {
             ])
 
 
-        console.log("id usuario::", id)
-        console.log("nombr usuaroi::", nombreSano)
-
-
         if (error) {
             //si hay error por ejemplo al haber 2 emails iguales en datbase entra aqui
-            return res.json({ error, message })
+            return res.status(404).json({ error, message })
         } else {
             const token = jwt.sign({ id, usuario }, "secretKey")
 
-            return res.json({ error, message, token })
+            return res.status(200).json({ error, messageAuthValidator, token })
         }
 
 
@@ -68,7 +70,8 @@ const registerController = async (req, res) => {
     } else {
         return res.status(401).json(
             {
-                error: "introduzca una password mas seguro"
+                messageAuthValidator,
+                error: true
             }
         )
     }
@@ -142,7 +145,7 @@ const forgotPassword = async (req, res) => {
         //si el correo existe en la database entonces entra aqui
         const token = jwt.sign({ email }, "secretKey", { expiresIn: "5m" })
         const sendEmailToken = `https://localhost:8000/reset-password?token=${token}`
-        
+
 
 
         //se necesita configurar un email en donde se envie el sendEmailToken y 
@@ -151,8 +154,8 @@ const forgotPassword = async (req, res) => {
 
 
         res.json({
-            error:false,
-            message:"se ha enviado un codigo de verificacion a tu email"
+            error: false,
+            message: "se ha enviado un codigo de verificacion a tu email"
         })
     }
 
