@@ -77,21 +77,6 @@ const registerController = async (req, res) => {
     }
 
 
-
-
-
-    //si no hay error entra aqui
-    //hacer consulta de sql para recibir el id de tal usuario
-    /*
-        token = jwt.sign({ id: 12, usuario: "juanito" }, "secretKey")
-        return res.status(200).json({
-            error: false,
-            token,
-            message: "Se ha creado su cuenta exitosamente",
-        })
-    */
-
-
 }
 
 
