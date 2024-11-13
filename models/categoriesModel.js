@@ -54,20 +54,20 @@ export default class CategoriesModel {
 
     static async editCategoryById(dataReceived) {
         try {
-            const {id_categoria,nombre} = dataReceived
+            const { id_categoria, nombre } = dataReceived
 
-     
+
 
             await mysqlPromesa('CALL actualizar_categoria(?, ?,@exito,@mensaje);', [id_categoria, nombre])
             const [result] = await mysqlPromesa("SELECT @exito AS exito, @mensaje AS message")
 
-            if(result.exito == 1 ){
-                return {error:false,message:result.message}
+            if (result.exito == 1) {
+                return { error: false, message: result.message }
             }
 
 
-            return {error:false,message:result.message}
-            
+            return { error: false, message: result.message }
+
 
         } catch (error) {
             return { error: true, message: error }
@@ -75,5 +75,25 @@ export default class CategoriesModel {
     }
 
 
-    
+    static async deleteCategoryById(idReceived) {
+        try {
+            const id_categoria = idReceived
+
+            await mysqlPromesa('CALL eliminar_categoria(?,@exito,@mensaje)', [id_categoria])
+            const [result] = await mysqlPromesa("SELECT @exito AS exito,@mensaje AS message")
+
+            if(result.exito == 1){
+                return {error:false,message:result.message}
+            }
+
+            return {error:true,message:result.message}
+
+        } catch (error) {
+          
+            return {error:true,message:error}
+        }
+
+
+    }
+
 }
