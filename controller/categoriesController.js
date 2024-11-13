@@ -67,16 +67,16 @@ const addCategories = async (req, res) => {
 
 const editCategoryById = async (req, res) => {
     try {
-        const id_categoria = req.body.id_category
+        const id_categoria = req.body.id
         const nombre = req.body.name
 
         if (!id_categoria || !nombre) {
             return res.status(400).json({ error: true, message: "No such properties exist in the request body" })
         }
 
-        const data = {id_categoria,nombre}
 
-        const { error, message } = await CategoriesModel.editCategoryById({id_categoria,nombre})
+
+        const { error, message } = await CategoriesModel.editCategoryById({ id_categoria, nombre })
 
 
         if (error) {
@@ -86,7 +86,7 @@ const editCategoryById = async (req, res) => {
 
         return res.status(200).json({ error: false, message })
     } catch (error) {
-  
+
         return res.status(500).json({ error: true, message: error })
     }
 
@@ -94,22 +94,33 @@ const editCategoryById = async (req, res) => {
 
 
 
-const deleteByIdCategories = async (req, res) => {
-    const id_categoria = req.body.id_categoria
+const deleteCategoryById = async (req, res) => {
+    try {
+        const id_categoria = req.params.id
 
+        console.log(id_categoria)
+        if (!id_categoria) {
+            return res.status(400).json({ error: true, message: "Id category is not defined in params url" })
+        }
 
-    const data = await mysqlPromesa('CALL eliminar_categoria(?,@exito,@mensaje)', [id_categoria])
+        if(isNaN(id_categoria)){
+            return res.status(400).json({error:true,message:"Id category params is not a number"})
+        }
 
-    const [result] = await mysqlPromesa("SELECT @exito AS exito,@mensaje AS mensaje")
+        const { error, message } = await CategoriesModel.deleteCategoryById(id_categoria)
 
+       
+        if (error) {
+            return res.status(400).json({ error: true, message })
+        }
 
-    if (result.exito == 1) {
-        res.json({ error: false, mensaje: result.mensaje, data })
-        return;
+    
+        return res.status(400).json({ error: true, message })
+
+    } catch (error) {
+    
+        return res.status(500).json({ error: true, message: error })
     }
-
-
-    res.json({ error: true, mensaje: result.mensaje })
 
 
 
@@ -117,4 +128,4 @@ const deleteByIdCategories = async (req, res) => {
 
 
 
-export default { readAllCategories, selectByIdCategories, addCategories, deleteByIdCategories,editCategoryById }
+export default { readAllCategories, selectByIdCategories, addCategories, deleteCategoryById, editCategoryById }
