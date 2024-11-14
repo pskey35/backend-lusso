@@ -18,7 +18,7 @@ export default class Products {
 
     }
 
-    static async getProductsById(req, res) {
+    static async getProductById(req, res) {
 
         const idParams = req.params.id
 
@@ -143,7 +143,7 @@ export default class Products {
     }
 
 
-    static async getAllProductsImagesById(req, res) {
+    static async getAllImagesProductById(req, res) {
         try {
 
             const idParams = req.params.id
@@ -160,14 +160,14 @@ export default class Products {
 
 
 
-            const { error, message, data } = await ModelProducts.getAllProductsImagesById(idParams)
+            const { error, message, data } = await ModelProducts.getAllImagesProductById(idParams)
 
 
             if (error) {
                 return res.status(500).json({ error: true, message })
             }
 
-            
+
 
 
             return res.status(200).json({ error: false, message, data })
@@ -184,7 +184,72 @@ export default class Products {
         }
     }
 
+
+    static async addImageProduct(req, res) {
+        try {
+
+            const idParams = req.params.id
+
+            if (!idParams) {
+                return res.status(400).json({ error: true, message: "Id params is not defined" })
+            }
+
+            if (isNaN(idParams)) {
+                return res.status(400).json({ error: true, message: "Id params is not a number" })
+            }
+
+
+            const fileBuffer = req.file.buffer
+
+
+            const { error, message } = await ModelProducts.addImageProduct({ idParams, fileBuffer })
+
+            if (error) {
+                return res.status(500).json({ error: true, message })
+            }
+
+
+            return res.status(200).json({ error: false, message })
+
+
+        } catch (error) {
+            return res.status(500).json({ error: true, message: error })
+        }
+    }
+
+
+    static async deleteAllImagesProductById(req, res) {
+        try {
+
+            const idParams = req.params.id
+
+            if (!idParams) {
+                return res.status(400).json({ error: true, message: "Id params is not defined in url" })
+            }
+
+
+            if (isNaN(idParams)) {
+                return res.status(400).json({ error: true, message: "Id params is not a number" })
+            }
+
+
+            const { error, message } = await ModelProducts.deleteAllImagesProductById(idParams)
+
+            if (error) {
+                return res.status(400).json({ error: true, message })
+            }
+
+
+            return res.status(200).json({ error: false, message })
+
+        } catch (error) {
+            return res.status(500).json({ error: true, message: error })
+        }
+    }
+
 }
+
+
 
 
 
