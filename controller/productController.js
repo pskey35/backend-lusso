@@ -90,8 +90,8 @@ export default class Products {
     static async updateProduct(req, res) {
 
         const idParams = req.params.id
-        if(isNaN(idParams)){
-           return res.status(404).json({error:true,message:"enter a valid ID"}) 
+        if (isNaN(idParams)) {
+            return res.status(404).json({ error: true, message: "enter a valid ID" })
         }
         const body = {
             id_product: idParams,
@@ -128,19 +128,62 @@ export default class Products {
             body.state,
             body.category_id
         ]);
-   
-        if(error){
-            return res.status(400).json({error,message})
+
+        if (error) {
+            return res.status(400).json({ error, message })
         }
 
 
-        return res.status(200).json({error,message})
+        return res.status(200).json({ error, message })
 
 
 
 
 
     }
+
+
+    static async getAllProductsImagesById(req, res) {
+        try {
+
+            const idParams = req.params.id
+
+
+            if (!idParams) {
+                return res.status(400).json({ error: true, message: "IdParams is not defined in your payload body" })
+            }
+
+
+            if (isNaN(idParams)) {
+                return res.status(400).json({ error: true, message: "Id params need to be a number" })
+            }
+
+
+
+            const { error, message, data } = await ModelProducts.getAllProductsImagesById(idParams)
+
+
+            if (error) {
+                return res.status(500).json({ error: true, message })
+            }
+
+            
+
+
+            return res.status(200).json({ error: false, message, data })
+
+
+
+
+
+
+        } catch (error) {
+
+
+            return res.status(500).json({ error: true, message: error })
+        }
+    }
+
 }
 
 
