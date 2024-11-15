@@ -12,7 +12,10 @@ import path from "node:path"
 import { fileURLToPath } from 'url';
 
 import dotenv from "dotenv"
+import cors from "cors"
 
+
+app.use(cors())
 
 
 
