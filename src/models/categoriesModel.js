@@ -11,6 +11,9 @@ export default class CategoriesModel {
             return { error: false, message: result.message, data }
         }
 
+        console.log("debuging")
+        console.lo(result.error)
+        console.log(result.message)
         return { error: true, message: result.message }
 
     }
