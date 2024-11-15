@@ -11,7 +11,7 @@ import imagesRouter from "./routes/imageRouter.js"
 import path from "node:path"
 import { fileURLToPath } from 'url';
 
-import dotenv from "dotenv"
+//import dotenv from "dotenv"
 
 
 
@@ -20,7 +20,7 @@ import dotenv from "dotenv"
 
 const app = express()
 
-dotenv.config();
+//dotenv.config();
 app.use(express.json())
 app.use(cors())
 //crear el endpoint de autenticacion
