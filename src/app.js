@@ -7,7 +7,7 @@ import categoryRouter from "./routes/categoryRouter.js"
 import dashboardRouter from "./routes/dashboardRouter.js"
 import productsRouter from "./routes/productsRouter.js"
 import imagesRouter from "./routes/imageRouter.js"
-import cartShopRouter from "./routes/cartShopRouter.js"
+//import cartShopRouter from "./routes/cartShopRouter.js"
 import path from "node:path"
 import { fileURLToPath } from 'url';
 
@@ -28,8 +28,7 @@ app.use(express.static(path.join(fileURLToPath(import.meta.url), 'public')));
 
 
 app.use(authRouter, imagesRouter,dashboardRouter)
-app.use(categoryRouter,productsRouter,cartShopRouter)
+app.use(categoryRouter,productsRouter)
 
 
-const PORT = process.env.PORT ?? 8000
-app.listen(PORT, () => console.log("corriendo en el puerto", PORT))
+export default app

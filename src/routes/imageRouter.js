@@ -11,7 +11,7 @@ const upload = multer({storage})
 
 
 //esta ruta se usara en /
-router.post("/upload",authToken,upload.single("image"),handlerImages)
+router.post("/upload",upload.single("image"),handlerImages)
 
 
 export default router

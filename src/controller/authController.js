@@ -87,12 +87,17 @@ const loginController = async (req, res) => {
     const inputSanoPassword = xss(password)
 
 
+    //aqui falta validar el usuario y password
+
     const { booleanSuccesLogin, id, usuario, message } = await User.login(inputSanoUser, inputSanoPassword)
+
+
+    
 
     if (booleanSuccesLogin) {
 
 
-        const token = jwt.sign({ id, usuario }, "secretKey")
+        const token = jwt.sign({ id, usuario, permisos}, "secretKey")
 
         return res.status(200).json({
             token: token,

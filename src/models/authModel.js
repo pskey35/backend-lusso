@@ -1,10 +1,5 @@
 import { mysqlPromesa } from "../config/mysql.js"
 
-
-
-
-
-
 export class User {
 
     static async register(...user) {
@@ -60,9 +55,6 @@ export class User {
 
 
             await mysqlPromesa(`CALL login_usuario( ? , ?, @exito, @resultado, @id_usuario, @nombre, @apellido) `, [correo, password]);
-
-
-
 
             const [resu] = await mysqlPromesa(`SELECT @exito AS exito, 
                 @resultado AS resultado,

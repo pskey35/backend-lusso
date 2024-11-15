@@ -10,9 +10,7 @@ const routerAuth = express.Router()
 
 
 routerAuth.post("/login",controler.loginController)
-
 routerAuth.post("/register",controler.registerController)
-
 routerAuth.post("/forgot-password",authToken,controler.forgotPassword)
 
 

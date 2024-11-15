@@ -1,6 +1,7 @@
 import express from "express"
 import ControllerProducts from "../controller/productController.js"
 import multer from "multer"
+//import {authToken} from "../utils/middlewareAuth.js"
 
 const storage = multer.memoryStorage()
 
