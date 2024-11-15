@@ -15,7 +15,7 @@ import dotenv from "dotenv"
 import cors from "cors"
 
 
-app.use(cors())
+
 
 
 
