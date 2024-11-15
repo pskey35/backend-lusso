@@ -4,8 +4,7 @@
  Un proyecto de backend para un eccomerce 
 
 
-Este proyecto es para la agencia web de "DeOne" en la cual yo formo
-parte del equipo<br>
+Este proyecto es para la agencia web de "DeOne" en la cual formo parte de la junta directiva <br><br>
 
 [![N|Solid](https://firebasestorage.googleapis.com/v0/b/eccomerce-clyu.appspot.com/o/Recurso%203.svg?alt=media&token=891d9f22-163b-40a8-bada-65ce63cf7ef8)](https://nodesource.com/products/nsolid)
 
