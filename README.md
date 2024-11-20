@@ -31,7 +31,7 @@ Postman (para probar los endpoints) - opcional<br>
 
 # Instalacion
 clona este repositorio
->`$https://github.com/pskey35/shop-mvc-api.git` <br><br>
+>`$git clone https://github.com/pskey35/shop-mvc-api.git` <br><br>
 >`$cd shop-mvc-api`<br><br>
 >`$npm install`
 
