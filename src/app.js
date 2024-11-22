@@ -26,7 +26,7 @@ const swaggerDocument = require("../openapi.json");
 
 
 const app = express()
-app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.use(express.json())
 app.use(cors())
